@@ -1,0 +1,74 @@
+# $Id: Makefile.in 101 2013-05-30 12:56:35Z mzbjyza2mji4zgz $
+
+TOPDIR		= @TOPDIR@
+MKRULESDIR	= @MKRULESDIR@
+
+include $(MKRULESDIR)/vars.mk
+
+TSRCS2		= ttest2.cpp
+TOBJS2		= ttest2.lo
+
+TSRCS3		= ttest3.cpp
+TOBJS3		= ttest3.lo
+
+TARGETS		= ttest2 ttest3
+
+ifeq ($(TARGET_ARCH), POSIX)
+GSRCS		= main.cpp
+GOBJS		= main.lo
+
+TSRCS		= ttest.cpp
+TOBJS		= ttest.lo
+
+PSRCS		= ptest.cpp
+POBJS		= ptest.lo
+
+PSRCS1		= ptest1.cpp
+POBJS1		= ptest1.lo
+
+LSRCS		= ltest.cpp
+LOBJS		= ltest.lo
+
+TARGETS		+= grid-proxy-forever ttest procTest procTest1 lockTest
+endif
+
+SRCS		= $(TSRCS) $(TSRCS2) $(TSRCS3) $(GSRCS) $(PSRCS) $(PSRCS1) \
+			$(LSRCS)
+OBJS		= $(TOBJS) $(TOBJS2) $(TOBJS3) $(GOBJS) $(POBJS) $(POBJS1) \
+			$(LOBJS)
+
+ALL::	$(TARGETS)
+
+ttest:	$(TOBJS) $(DEP_NATALIB)
+	$(LTCLEAN) $@
+	$(LTLINK_CXX) -o $@ $(TOBJS) $(DEP_NATALIB) $(LDFLAGS)
+
+ttest2:	$(TOBJS2) $(DEP_NATALIB)
+	$(LTCLEAN) $@
+	$(LTLINK_CXX) -o $@ $(TOBJS2) $(DEP_NATALIB) $(LDFLAGS)
+
+ttest3:	$(TOBJS3) $(DEP_NATALIB)
+	$(LTCLEAN) $@
+	$(LTLINK_CXX) -o $@ $(TOBJS3) $(DEP_NATALIB) $(LDFLAGS)
+
+procTest:	$(POBJS) $(DEP_NATALIB)
+	$(LTCLEAN) $@
+	$(LTLINK_CXX) -o $@ $(POBJS) $(DEP_NATALIB) $(LDFLAGS)
+
+procTest1:	$(POBJS1) $(DEP_NATALIB)
+	$(LTCLEAN) $@
+	$(LTLINK_CXX) -o $@ $(POBJS1) $(DEP_NATALIB) $(LDFLAGS)
+
+lockTest:	$(LOBJS) $(DEP_NATALIB)
+	$(LTCLEAN) $@
+	$(LTLINK_CXX) -o $@ $(LOBJS) $(DEP_NATALIB) $(LDFLAGS)
+
+grid-proxy-forever:	$(GOBJS) $(DEP_NATALIB)
+	$(LTCLEAN) $@
+	$(LTLINK_CXX) -o $@ $(GOBJS) $(DEP_NATALIB) $(LDFLAGS)
+
+$(DEP_NATALIB):
+	(cd $(BUILD_LIBDIR); $(MAKE))
+
+include $(MKRULESDIR)/rules.mk
+include .depend
